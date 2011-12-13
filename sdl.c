@@ -27,10 +27,11 @@ SDL_FillRect(screen, &rect, color);
 //SDL_UpdateRect(screen, x, y, w, h);
 
 
-if(counter++==0) SDL_Flip(screen);
+if(counter++>=STEPPING)  {
+	SDL_Flip(screen);
+	counter =0;
+}
 
-if(counter>STEPPING)
-counter =0;
 
 
 }
@@ -52,9 +53,9 @@ return ;
 Uint8 r = value;
 Uint8 g = value >> 8;
 Uint8 b = value >> 16;
-r=255;
-g=255;
-b=255;
+//r=255;
+//g=255;
+//b=255;
 
 setpixel(x, y, r, g, b);
 //SDL_Flip();
