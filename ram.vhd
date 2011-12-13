@@ -15,7 +15,10 @@ entity sync_ram is
   );
 end entity sync_ram;
 
-architecture RTL of sync_ram is
+
+
+
+architecture read_write of sync_ram is
 
    type ram_type is array (0 to (2**address'length)-1) of std_logic_vector(datain'range);
    signal ram : ram_type;
@@ -45,4 +48,29 @@ begin
 
   dataout <= ram(to_integer(unsigned(read_address)));
 
-end architecture RTL;
+end architecture read_write;
+
+
+
+
+architecture write_only of sync_ram is
+
+procedure handle (a, b : integer) is
+  begin
+    assert false severity failure;
+  end handle;
+  attribute foreign of handle : procedure is "VHPIDIRECT handle_data";
+
+begin
+
+  RamProc: process(clock) is
+
+  begin
+    if rising_edge(clock) then
+      if we = '1' then
+	handle(conv_integer(address), conv_integer(datain));
+      end if;
+    end if;
+  end process RamProc;
+
+end architecture write_only;
